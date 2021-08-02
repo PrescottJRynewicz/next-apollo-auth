@@ -2,10 +2,22 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { ApolloServer } from 'apollo-server-micro';
 import { typeDefs } from 'graph/types';
 import { resolvers } from '/graph/resolvers';
+import { Mongo } from '/graph/mongo';
 
-const apolloServer = new ApolloServer({ typeDefs, resolvers });
-
-const startServer = apolloServer.start();
+const apolloServer = new ApolloServer({
+  typeDefs,
+  resolvers,
+  context: async () => {
+    await Mongo.connectionPromise;
+    return {
+      Mongo,
+    };
+  },
+});
+const connectionPromises = Promise.all([
+  apolloServer.start(),
+  Mongo.connectionPromise,
+]);
 
 export default async function handler(
   req: NextApiRequest,
@@ -26,7 +38,7 @@ export default async function handler(
       return false;
     }
 
-    await startServer;
+    await connectionPromises;
     return await apolloServer.createHandler({
       path: '/api/graphql',
     })(req, res);

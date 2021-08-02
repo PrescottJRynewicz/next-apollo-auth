@@ -2,24 +2,32 @@ import { Db, MongoClient } from 'mongodb';
 import { DbCollections, User } from '/types/schema/generated';
 
 // Connection URL
-const url = 'mongodb://root:example@localhost:27017/next-app?authSource=admin';
-export const mongoClient = new MongoClient(url);
+const url = process.env.MONGO_URI;
+export const mongoClient = new MongoClient(url || '');
 
-// Database Name
+// Database Names
 export const DatabaseName = 'next-app';
 
 class MongoConnection {
   Database: Db = undefined as unknown as Db;
 
+  _connectionPromise: Promise<MongoClient> =
+    undefined as unknown as Promise<MongoClient>;
+
   constructor() {
-    mongoClient
-      .connect()
+    this._connectionPromise = mongoClient.connect();
+
+    this._connectionPromise
       .then(() => {
         this.Database = mongoClient.db(DatabaseName);
       })
       .catch((error) => {
         throw error;
       });
+  }
+
+  get connectionPromise() {
+    return this._connectionPromise;
   }
 
   getCollection<DocumentType>(collectionName: DbCollections) {

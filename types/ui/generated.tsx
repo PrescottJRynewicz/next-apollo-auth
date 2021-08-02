@@ -29,7 +29,7 @@ export type Query = {
 export type User = {
   __typename?: 'User';
   _id: Scalars['ID'];
-  name: Scalars['String'];
+  email: Scalars['String'];
 };
 
 export type GetUserQueryVariables = Exact<{ [key: string]: never; }>;
@@ -39,7 +39,7 @@ export type GetUserQuery = (
   { __typename?: 'Query' }
   & { users: Array<(
     { __typename?: 'User' }
-    & Pick<User, '_id' | 'name'>
+    & Pick<User, '_id' | 'email'>
   )> }
 );
 
@@ -48,7 +48,7 @@ export const GetUserDocument = gql`
     query GetUser {
   users {
     _id
-    name
+    email
   }
 }
     `;

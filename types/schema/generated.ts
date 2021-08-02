@@ -24,7 +24,7 @@ export type Query = {
 export type User = {
   __typename?: 'User';
   _id: Scalars['ID'];
-  name: Scalars['String'];
+  email: Scalars['String'];
 };
 
 
@@ -133,7 +133,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
 
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
   _id: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  name: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  email: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
