@@ -1,8 +1,9 @@
 import { Adapter } from 'next-auth/adapters';
-import { Mongo } from '/graph/mongo';
+import { Mongo } from '/database/mongo';
 
 const MongoAdapter = (): ReturnType<Adapter> => ({
-  async getAdapter() {
+  async getAdapter(appOptions) {
+    console.log(appOptions);
     await Mongo.connectionPromise;
     return {
       async createUser(profile) {
@@ -61,7 +62,8 @@ const MongoAdapter = (): ReturnType<Adapter> => ({
         console.log('delete session', sessionToken);
       },
       async createVerificationRequest(...params) {
-        console.log(params);
+        console.log('create verification request');
+        console.log(params.length);
         // await provider.sendVerificationRequest({
         //   identifier,
         //   url,

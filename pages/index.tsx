@@ -2,8 +2,8 @@ import React from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
 import styles from 'styles/Home.module.css';
-import { useGetUserQuery } from '/types/ui/generated';
 import { signIn } from 'next-auth/client';
+import { useGetUserQuery } from '/graph/generated';
 
 export default function Home() {
   const results = useGetUserQuery();

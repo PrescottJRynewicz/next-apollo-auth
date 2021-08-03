@@ -1,8 +1,11 @@
-import { GraphQLResolveInfo } from 'graphql';
+import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
+import { gql } from '@apollo/client';
+import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+const defaultOptions =  {}
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -10,10 +13,13 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  Date: Date;
 };
 
+
 export enum DbCollections {
-  Users = 'users'
+  Users = 'users',
+  VerificationRequests = 'verificationRequests'
 }
 
 export type Query = {
@@ -25,8 +31,70 @@ export type User = {
   __typename?: 'User';
   _id: Scalars['ID'];
   email: Scalars['String'];
+  emailVerified?: Maybe<Scalars['Date']>;
+  createdAt: Scalars['Date'];
+  updatedAt: Scalars['Date'];
+  image?: Maybe<Scalars['String']>;
 };
 
+export type VerificationRequest = {
+  __typename?: 'VerificationRequest';
+  _id: Scalars['ID'];
+  identifier: Scalars['String'];
+  token: Scalars['String'];
+  expires: Scalars['Date'];
+  createdAt: Scalars['Date'];
+  updatedAt: Scalars['Date'];
+};
+
+export type GetUserQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetUserQuery = (
+  { __typename?: 'Query' }
+  & { users: Array<(
+    { __typename?: 'User' }
+    & Pick<User, '_id' | 'email' | 'createdAt'>
+  )> }
+);
+
+
+export const GetUserDocument = gql`
+    query GetUser {
+  users {
+    _id
+    email
+    createdAt
+  }
+}
+    `;
+
+/**
+ * __useGetUserQuery__
+ *
+ * To run a query within a React component, call `useGetUserQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUserQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetUserQuery(baseOptions?: Apollo.QueryHookOptions<GetUserQuery, GetUserQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetUserQuery, GetUserQueryVariables>(GetUserDocument, options);
+      }
+export function useGetUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUserQuery, GetUserQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetUserQuery, GetUserQueryVariables>(GetUserDocument, options);
+        }
+export type GetUserQueryHookResult = ReturnType<typeof useGetUserQuery>;
+export type GetUserLazyQueryHookResult = ReturnType<typeof useGetUserLazyQuery>;
+export type GetUserQueryResult = Apollo.QueryResult<GetUserQuery, GetUserQueryVariables>;
 
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
@@ -110,22 +178,30 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
+  Date: ResolverTypeWrapper<Scalars['Date']>;
   DbCollections: DbCollections;
   Query: ResolverTypeWrapper<{}>;
   User: ResolverTypeWrapper<User>;
   ID: ResolverTypeWrapper<Scalars['ID']>;
   String: ResolverTypeWrapper<Scalars['String']>;
+  VerificationRequest: ResolverTypeWrapper<VerificationRequest>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
+  Date: Scalars['Date'];
   Query: {};
   User: User;
   ID: Scalars['ID'];
   String: Scalars['String'];
+  VerificationRequest: VerificationRequest;
   Boolean: Scalars['Boolean'];
 };
+
+export interface DateScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Date'], any> {
+  name: 'Date';
+}
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   users: Resolver<ReadonlyArray<ResolversTypes['User']>, ParentType, ContextType>;
@@ -134,12 +210,28 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
   _id: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   email: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  emailVerified: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
+  createdAt: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
+  updatedAt: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
+  image: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type VerificationRequestResolvers<ContextType = any, ParentType extends ResolversParentTypes['VerificationRequest'] = ResolversParentTypes['VerificationRequest']> = {
+  _id: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  identifier: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  token: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  expires: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
+  createdAt: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
+  updatedAt: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type Resolvers<ContextType = any> = {
+  Date: GraphQLScalarType;
   Query: QueryResolvers<ContextType>;
   User: UserResolvers<ContextType>;
+  VerificationRequest: VerificationRequestResolvers<ContextType>;
 };
 
 

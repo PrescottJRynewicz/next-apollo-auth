@@ -1,0 +1,10 @@
+type VerificationRequest {
+
+    _id: ID!
+    identifier: String!
+    token: String!
+    expires: Date!
+    createdAt: Date!
+    updatedAt: Date!
+
+}

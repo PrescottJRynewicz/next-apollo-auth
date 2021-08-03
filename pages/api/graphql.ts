@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { ApolloServer } from 'apollo-server-micro';
 import { typeDefs } from 'graph/types';
 import { resolvers } from '/graph/resolvers';
-import { Mongo } from '/graph/mongo';
+import { Mongo } from '/database/mongo';
 
 const apolloServer = new ApolloServer({
   typeDefs,

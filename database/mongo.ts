@@ -1,5 +1,5 @@
 import { Db, MongoClient } from 'mongodb';
-import { DbCollections, User } from '/types/schema/generated';
+import { DbCollections, User, VerificationRequest } from '/graph/generated';
 
 // Connection URL
 const url = process.env.MONGO_URI;
@@ -39,6 +39,12 @@ class MongoConnection {
 
   get Users() {
     return this.getCollection<User>(DbCollections.Users);
+  }
+
+  get VerificationRequests() {
+    return this.getCollection<VerificationRequest>(
+      DbCollections.VerificationRequests
+    );
   }
 }
 

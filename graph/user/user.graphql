@@ -1,6 +1,11 @@
 type User {
     _id: ID!
     email: String!
+    emailVerified: Date
+    createdAt: Date!
+    updatedAt: Date!
+    image: String
+
 }
 
 type Query {

@@ -4,5 +4,6 @@ query GetUser {
     users {
         _id
         email
+        createdAt
     }
 }
