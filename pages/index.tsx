@@ -2,7 +2,7 @@ import React from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
 import styles from 'styles/Home.module.css';
-import { signIn, useSession } from 'next-auth/client';
+import { signIn, useSession, signOut } from 'next-auth/client';
 import { useGetUserQuery } from '/graph/generated';
 
 export default function Home() {
@@ -33,6 +33,9 @@ export default function Home() {
         <div className={styles.grid}>
           <button type="button" onClick={() => signIn()}>
             Sign In
+          </button>
+          <button type="button" onClick={() => signOut()}>
+            Sign Out
           </button>
         </div>
       </main>
