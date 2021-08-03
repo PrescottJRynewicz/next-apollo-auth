@@ -25,14 +25,9 @@ export default NextAuth({
     secret: process.env.JWT_SECRET,
   },
 
-  // A database is optional, but required to persist accounts in a database
-  // database: process.env.MONGO_URI,
+  /*
+   * Because TypeORM does not officially support Mongo 4 right now,
+   * we need to make our own Adapter to use Mongo
+   */
   adapter: MongoAdapter(),
-  // pages: {
-  // signIn: '/auth/signin',
-  // signOut: '/auth/signout',
-  // error: '/auth/error', // Error code passed in query string as ?error=
-  // verifyRequest: '/auth/verify-request', // (used for check email message)
-  // newUser: '/auth/new-user', // New users will be directed here on first sign in (leave the property out if not of interest)
-  // },
 });
