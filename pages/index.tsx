@@ -2,14 +2,9 @@ import React from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
 import styles from 'styles/Home.module.css';
-import { useGetUserQuery } from '/types/ui/generated';
-import { NextPageContext } from 'next';
-import auth0 from '/pages/api/utils/auth0';
+import { signIn, signOut } from 'next-auth/client';
 
 export default function Home() {
-  const results = useGetUserQuery();
-  console.log(results.data);
-
   return (
     <div className={styles.container}>
       <Head>
@@ -29,9 +24,12 @@ export default function Home() {
         </p>
 
         <div className={styles.grid}>
-          <a href="api/login" className={styles.card}>
-            <h2>Login</h2>
-          </a>
+          <button type="button" onClick={() => signIn()}>
+            Sign In
+          </button>
+          <button type="button" onClick={() => signOut()}>
+            Sign Out
+          </button>
         </div>
       </main>
 
@@ -48,16 +46,4 @@ export default function Home() {
       </footer>
     </div>
   );
-}
-
-export async function getServerSideProps(context: NextPageContext) {
-  if (context.req && context.res) {
-    const session = await auth0.getSession(context.req, context.res);
-    console.log(session);
-  } else {
-  }
-
-  return {
-    props: { hello: 'world' },
-  };
 }

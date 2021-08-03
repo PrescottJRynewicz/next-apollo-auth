@@ -3,6 +3,7 @@
 query GetUser {
     users {
         _id
-        name
+        email
+        createdAt
     }
 }

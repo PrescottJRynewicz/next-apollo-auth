@@ -18,6 +18,7 @@ module.exports = {
   },
   plugins: ['react', 'prettier', 'meteor', '@typescript-eslint'],
   rules: {
+    'no-return-await': 'off',
     'import/prefer-default-export': 'off',
     'import/extensions': 'off',
     'import/no-absolute-path': 'off',

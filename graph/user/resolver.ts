@@ -1,21 +1,18 @@
-import { Resolvers } from '/types/schema/generated';
-import { Mongo } from '/graph/mongo';
 import { ApolloError } from 'apollo-server-micro';
+import { Resolvers } from '/graph/generated.server';
+import { ContextType } from '/graph/context';
+import { DeepPartial } from 'ts-essentials';
 
-export const userResolver: Resolvers = {
-  User: {
-    name: (parent) => parent.name,
-    _id: (parent) => parent._id,
-  },
+export const userResolver: DeepPartial<Resolvers<ContextType>> = {
   Query: {
-    users: async () => {
-      const user = await Mongo.Users.findOne();
+    users: async (_parent, _args, { Mongo }) => {
+      const users = await Mongo.Users.find().limit(10).toArray();
 
-      if (!user) {
+      if (!users.length) {
         throw new ApolloError('Unable to find user', '404');
       }
 
-      return [user];
+      return users;
     },
   },
 };

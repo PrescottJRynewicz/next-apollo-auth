@@ -1,22 +1,41 @@
 overwrite: true
 schema:  "./**/*.graphql"
 documents: "./**/*.graphql"
+
 generates:
-  ./types/schema/generated.ts:
+  # Server types.
+  # Specifically, types that mongo read / writes
+  # and will be used in graph ql resolvers
+  ./graph/generated.server.ts:
     plugins:
-      - "typescript"
-      - "typescript-resolvers":
+      - typescript:
+          scalars:
+            ObjectId: ObjectId
+            Date: Date
+      - typescript-resolvers:
           immutableTypes: true
           avoidOptionals:
             field: true
             defaultValue: true
             inputValue: true
             object: false
-
-  ./types/ui/generated.tsx:
+      - add:
+          content: import { ObjectId } from 'mongodb';
+    # Client types.
+    # Specifically, types that are returned from
+    # graphql queries, to be used on the front end
+  ./graph/generated.client.ts:
+    config:
+      scalars:
+        ObjectId: string
+        Date: string
     plugins:
-      - typescript
-      - typescript-operations
+      - typescript:
+          typesPrefix: Client
+      - typescript-operations:
+          typesPrefix: Client
       - typescript-react-apollo:
-          withComponent: true
+          typesPrefix: Client
           withHooks: true
+
+

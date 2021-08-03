@@ -1,12 +1,9 @@
 import { gql } from '@apollo/client';
-import * as React from 'react';
 import * as Apollo from '@apollo/client';
-import * as ApolloReactComponents from '@apollo/client/react/components';
 export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
-export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 const defaultOptions =  {}
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
@@ -15,31 +12,50 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  Date: string;
+  ObjectId: string;
 };
 
-export enum DbCollections {
-  Users = 'users'
+
+export enum ClientDbCollections {
+  Users = 'Users',
+  VerificationRequests = 'VerificationRequests'
 }
 
-export type Query = {
+
+export type ClientQuery = {
   __typename?: 'Query';
-  users: Array<User>;
+  users: Array<ClientUser>;
 };
 
-export type User = {
+export type ClientUser = {
   __typename?: 'User';
-  _id: Scalars['ID'];
-  name: Scalars['String'];
+  _id: Scalars['ObjectId'];
+  email: Scalars['String'];
+  emailVerified?: Maybe<Scalars['Date']>;
+  createdAt: Scalars['Date'];
+  updatedAt: Scalars['Date'];
+  image?: Maybe<Scalars['String']>;
 };
 
-export type GetUserQueryVariables = Exact<{ [key: string]: never; }>;
+export type ClientVerificationRequest = {
+  __typename?: 'VerificationRequest';
+  _id: Scalars['ObjectId'];
+  identifier: Scalars['String'];
+  token: Scalars['String'];
+  expires: Scalars['Date'];
+  createdAt: Scalars['Date'];
+  updatedAt: Scalars['Date'];
+};
+
+export type ClientGetUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetUserQuery = (
+export type ClientGetUserQuery = (
   { __typename?: 'Query' }
   & { users: Array<(
     { __typename?: 'User' }
-    & Pick<User, '_id' | 'name'>
+    & Pick<ClientUser, '_id' | 'email' | 'createdAt'>
   )> }
 );
 
@@ -48,16 +64,11 @@ export const GetUserDocument = gql`
     query GetUser {
   users {
     _id
-    name
+    email
+    createdAt
   }
 }
     `;
-export type GetUserComponentProps = Omit<ApolloReactComponents.QueryComponentOptions<GetUserQuery, GetUserQueryVariables>, 'query'>;
-
-    export const GetUserComponent = (props: GetUserComponentProps) => (
-      <ApolloReactComponents.Query<GetUserQuery, GetUserQueryVariables> query={GetUserDocument} {...props} />
-    );
-    
 
 /**
  * __useGetUserQuery__
@@ -74,14 +85,14 @@ export type GetUserComponentProps = Omit<ApolloReactComponents.QueryComponentOpt
  *   },
  * });
  */
-export function useGetUserQuery(baseOptions?: Apollo.QueryHookOptions<GetUserQuery, GetUserQueryVariables>) {
+export function useGetUserQuery(baseOptions?: Apollo.QueryHookOptions<ClientGetUserQuery, ClientGetUserQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetUserQuery, GetUserQueryVariables>(GetUserDocument, options);
+        return Apollo.useQuery<ClientGetUserQuery, ClientGetUserQueryVariables>(GetUserDocument, options);
       }
-export function useGetUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUserQuery, GetUserQueryVariables>) {
+export function useGetUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ClientGetUserQuery, ClientGetUserQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetUserQuery, GetUserQueryVariables>(GetUserDocument, options);
+          return Apollo.useLazyQuery<ClientGetUserQuery, ClientGetUserQueryVariables>(GetUserDocument, options);
         }
 export type GetUserQueryHookResult = ReturnType<typeof useGetUserQuery>;
 export type GetUserLazyQueryHookResult = ReturnType<typeof useGetUserLazyQuery>;
-export type GetUserQueryResult = Apollo.QueryResult<GetUserQuery, GetUserQueryVariables>;
+export type GetUserQueryResult = Apollo.QueryResult<ClientGetUserQuery, ClientGetUserQueryVariables>;
