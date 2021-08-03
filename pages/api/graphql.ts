@@ -3,13 +3,16 @@ import { ApolloServer } from 'apollo-server-micro';
 import { typeDefs } from 'graph/types';
 import { resolvers } from '/graph/resolvers';
 import { Mongo } from '/database/mongo';
+import { getSession } from 'next-auth/client';
 
 const apolloServer = new ApolloServer({
   typeDefs,
   resolvers,
-  context: async () => {
+  context: async ({ req }: { req: NextApiRequest }) => {
+    const session = await getSession({ req });
     await Mongo.connectionPromise;
     return {
+      session,
       Mongo,
     };
   },

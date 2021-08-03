@@ -1,7 +1,6 @@
-
-
 scalar Date
 scalar ObjectId
+
 
 enum DbCollections {
     Users

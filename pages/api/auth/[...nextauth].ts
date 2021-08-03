@@ -1,6 +1,8 @@
-import NextAuth from 'next-auth';
+import NextAuth, { Session } from 'next-auth';
 import Providers from 'next-auth/providers';
 import MongoAdapter from '/pages/api/auth/utils/MongoAdapter';
+import { JWT } from 'next-auth/jwt';
+import { Mongo } from '/database/mongo';
 
 export default NextAuth({
   providers: [
@@ -23,6 +25,21 @@ export default NextAuth({
   },
   jwt: {
     secret: process.env.JWT_SECRET,
+  },
+
+  callbacks: {
+    async session(session: Session, token: JWT) {
+      await Mongo.connectionPromise;
+      if (token.email) {
+        const user = await Mongo.Users.findOne({ email: token.email });
+        const newSession = {
+          ...session,
+          user,
+        };
+        return newSession;
+      }
+      return session;
+    },
   },
 
   /*

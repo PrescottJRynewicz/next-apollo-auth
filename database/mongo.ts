@@ -1,12 +1,15 @@
 import { Db, MongoClient } from 'mongodb';
-import { DbCollections, User, VerificationRequest } from '/graph/generated';
+import {
+  DbCollections,
+  User,
+  VerificationRequest,
+} from '/graph/generated.server';
 
 // Connection URL
 const url = process.env.MONGO_URI;
 export const mongoClient = new MongoClient(url || '');
 
 // Database Names
-export const DatabaseName = 'next-app';
 
 class MongoConnection {
   Database: Db = undefined as unknown as Db;
@@ -19,7 +22,7 @@ class MongoConnection {
 
     this._connectionPromise
       .then(() => {
-        this.Database = mongoClient.db(DatabaseName);
+        this.Database = mongoClient.db(process.env.DATABASE_NAME);
       })
       .catch((error) => {
         throw error;
