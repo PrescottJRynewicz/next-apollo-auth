@@ -55,7 +55,7 @@ export type ClientGetUserQuery = (
   { __typename?: 'Query' }
   & { users: Array<(
     { __typename?: 'User' }
-    & Pick<ClientUser, '_id' | 'email' | 'createdAt'>
+    & Pick<ClientUser, '_id' | 'email' | 'createdAt' | 'emailVerified'>
   )> }
 );
 
@@ -66,6 +66,7 @@ export const GetUserDocument = gql`
     _id
     email
     createdAt
+    emailVerified
   }
 }
     `;

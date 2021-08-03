@@ -1,10 +1,17 @@
-import React from 'react';
+import styles from '/styles/Home.module.css';
 import Head from 'next/head';
 import Image from 'next/image';
-import styles from 'styles/Home.module.css';
+import React, { CSSProperties } from 'react';
+import Link from 'next/link';
 import { signIn, signOut } from 'next-auth/client';
 
 export default function Home() {
+  const buttonStyle: CSSProperties = {
+    border: 'solid black',
+    padding: '10px',
+    backgroundColor: 'transparent',
+    margin: '5px',
+  };
   return (
     <div className={styles.container}>
       <Head>
@@ -19,15 +26,27 @@ export default function Home() {
         </h1>
 
         <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
+          Explore the example pages in the{' '}
+          <code className={styles.code}>/pages</code>
+          directory
         </p>
 
         <div className={styles.grid}>
-          <button type="button" onClick={() => signIn()}>
+          <Link href="/static">
+            <a style={buttonStyle}>Static Page</a>
+          </Link>
+          <Link href="/ssr">
+            <a style={buttonStyle}>SSR Page</a>
+          </Link>
+          <Link href="/client">
+            <a style={buttonStyle}>Client Rendered Page</a>
+          </Link>
+        </div>
+        <div className={styles.grid}>
+          <button style={buttonStyle} type="button" onClick={() => signIn()}>
             Sign In
           </button>
-          <button type="button" onClick={() => signOut()}>
+          <button style={buttonStyle} type="button" onClick={() => signOut()}>
             Sign Out
           </button>
         </div>

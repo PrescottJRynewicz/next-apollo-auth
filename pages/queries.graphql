@@ -5,5 +5,6 @@ query GetUser {
         _id
         email
         createdAt
+        emailVerified
     }
 }
