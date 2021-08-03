@@ -3,6 +3,6 @@
 scalar Date
 
 enum DbCollections {
-    users
-    verificationRequests
+    Users
+    VerificationRequests
 }

@@ -18,8 +18,8 @@ export type Scalars = {
 
 
 export enum DbCollections {
-  Users = 'users',
-  VerificationRequests = 'verificationRequests'
+  Users = 'Users',
+  VerificationRequests = 'VerificationRequests'
 }
 
 export type Query = {
