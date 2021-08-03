@@ -2,6 +2,7 @@ import { Adapter, AdapterInstance } from 'next-auth/adapters';
 import { Mongo } from '/database/mongo';
 import { User } from '/graph/generated.server';
 import { ObjectId } from 'mongodb';
+import { Session } from 'next-auth';
 
 type AdapterType = ReturnType<Adapter>;
 
@@ -12,7 +13,7 @@ const MongoAdapter = (): AdapterType => ({
     AdapterInstance<
       User | undefined,
       { email: string; emailVerified: Date } | undefined,
-      { email: string; name: string } | undefined
+      (Session & { user: User }) | undefined
     >
   > {
     await Mongo.connectionPromise;
@@ -39,8 +40,7 @@ const MongoAdapter = (): AdapterType => ({
       },
       async getUserByEmail(email) {
         if (email) {
-          const user = await Mongo.Users.findOne({ email });
-          return user;
+          return await Mongo.Users.findOne({ email });
         }
         return undefined;
       },
@@ -106,9 +106,8 @@ const MongoAdapter = (): AdapterType => ({
 
       // Unimplemented methods. These methods are not needed
       // based on the next auth config.
-
-      async deleteUser(userId) {
-        console.log('delete user', userId);
+      async deleteUser() {
+        return undefined;
       },
       async getUserByProviderAccountId() {
         return undefined;
