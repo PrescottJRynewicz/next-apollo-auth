@@ -4,9 +4,6 @@ import MongoAdapter from '/pages/api/auth/utils/MongoAdapter';
 
 export default NextAuth({
   providers: [
-    Providers.Credentials({
-      authorize: async () => ({ name: 'Prescott' }),
-    }),
     Providers.Email({
       from: process.env.EMAIL_FROM,
       server: {
@@ -19,15 +16,23 @@ export default NextAuth({
       },
     }),
   ],
+  session: {
+    jwt: true,
+    // about 4 months
+    maxAge: 120 * 24 * 60 * 60,
+  },
+  jwt: {
+    secret: process.env.JWT_SECRET,
+  },
 
   // A database is optional, but required to persist accounts in a database
   // database: process.env.MONGO_URI,
   adapter: MongoAdapter(),
   // pages: {
-  //   signIn: '/auth/signin',
-  //   signOut: '/auth/signout',
-  //   error: '/auth/error', // Error code passed in query string as ?error=
-  //   verifyRequest: '/auth/verify-request', // (used for check email message)
-  //   newUser: '/auth/new-user', // New users will be directed here on first sign in (leave the property out if not of interest)
+  // signIn: '/auth/signin',
+  // signOut: '/auth/signout',
+  // error: '/auth/error', // Error code passed in query string as ?error=
+  // verifyRequest: '/auth/verify-request', // (used for check email message)
+  // newUser: '/auth/new-user', // New users will be directed here on first sign in (leave the property out if not of interest)
   // },
 });

@@ -2,12 +2,15 @@ import React from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
 import styles from 'styles/Home.module.css';
-import { signIn } from 'next-auth/client';
+import { signIn, useSession } from 'next-auth/client';
 import { useGetUserQuery } from '/graph/generated';
 
 export default function Home() {
   const results = useGetUserQuery();
-  console.log(results.data);
+  const [session] = useSession();
+
+  console.log('user query', results.data);
+  console.log('session', session);
 
   return (
     <div className={styles.container}>

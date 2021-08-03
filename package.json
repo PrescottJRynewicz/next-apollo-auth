@@ -25,6 +25,7 @@
     "swr": "^0.5.6"
   },
   "devDependencies": {
+    "@graphql-codegen/add": "^2.0.2",
     "@graphql-codegen/cli": "1.21.7",
     "@graphql-codegen/typescript": "1.23.0",
     "@graphql-codegen/typescript-operations": "1.18.4",

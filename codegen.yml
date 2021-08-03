@@ -4,6 +4,7 @@ documents: "./**/*.graphql"
 config:
   scalars:
     Date: Date
+    ObjectId: ObjectId
 generates:
   ./graph/generated.ts:
     plugins:
@@ -18,3 +19,6 @@ generates:
             defaultValue: true
             inputValue: true
             object: false
+      - add:
+          content: import { ObjectId } from 'mongodb';
+

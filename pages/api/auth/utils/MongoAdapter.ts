@@ -1,83 +1,139 @@
-import { Adapter } from 'next-auth/adapters';
+import { Adapter, AdapterInstance } from 'next-auth/adapters';
 import { Mongo } from '/database/mongo';
+import { User } from '/graph/generated';
+import { ObjectId } from 'mongodb';
 
-const MongoAdapter = (): ReturnType<Adapter> => ({
-  async getAdapter(appOptions) {
-    console.log(appOptions);
+type AdapterType = ReturnType<Adapter>;
+
+const MongoAdapter = (): AdapterType => ({
+  async getAdapter(
+    appOptions
+  ): Promise<
+    AdapterInstance<
+      User | undefined,
+      { email: string; emailVerified: Date } | undefined,
+      { email: string; name: string } | undefined
+    >
+  > {
     await Mongo.connectionPromise;
     return {
       async createUser(profile) {
-        console.log('create user', profile);
-        return null;
-      },
-      async getUser(id) {
-        console.log('get user', id);
+        if (profile) {
+          const insertedUser = await Mongo.Users.insertOne({
+            email: profile?.email,
+            emailVerified: profile?.emailVerified,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+          });
 
-        return null;
+          return await Mongo.Users.findOne({
+            _id: insertedUser.insertedId,
+          });
+        }
+        return undefined;
+      },
+      async getUser(_id) {
+        return await Mongo.Users.findOne({
+          _id: new ObjectId(_id),
+        });
       },
       async getUserByEmail(email) {
-        console.log('get user by email', email);
-
-        const user = await Mongo.Users.findOne({ email });
-
-        return user;
-      },
-      async getUserByProviderAccountId(providerId, providerAccountId) {
-        console.log(
-          'get user by provider account id',
-          providerId,
-          providerAccountId
-        );
-
-        return null;
+        if (email) {
+          const user = await Mongo.Users.findOne({ email });
+          return user;
+        }
+        return undefined;
       },
       async updateUser(user) {
-        console.log('update user', user);
+        if (user?._id) {
+          const result = await Mongo.Users.findOneAndUpdate(
+            {
+              _id: user._id,
+            },
+            {
+              $set: {
+                emailVerified: user.emailVerified,
+              },
+            }
+          );
+          return result.value;
+        }
+
+        return undefined;
+      },
+      async createVerificationRequest(
+        identifier,
+        url,
+        token,
+        _secret,
+        provider
+      ) {
+        await Mongo.VerificationRequests.insertOne({
+          identifier,
+          token,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          expires: new Date(Date.now() + provider.maxAge * 1000),
+        });
+
+        await provider.sendVerificationRequest({
+          identifier,
+          url,
+          baseUrl: appOptions.baseUrl,
+          provider,
+          token,
+        });
+      },
+      async getVerificationRequest(_identifier, verificationToken) {
+        const verificationRequest = await Mongo.VerificationRequests.findOne({
+          token: verificationToken,
+        });
+
+        if (verificationRequest) {
+          return {
+            ...verificationRequest,
+            id: String(verificationRequest._id),
+          };
+        }
 
         return null;
       },
+      async deleteVerificationRequest(_identifier, verificationToken) {
+        await Mongo.VerificationRequests.deleteOne({
+          token: verificationToken,
+        });
+      },
+
+      // Unimplemented methods. These methods are not needed
+      // based on the next auth config.
+
       async deleteUser(userId) {
         console.log('delete user', userId);
       },
-      async linkAccount(...params) {
-        console.log('link account', params);
+      async getUserByProviderAccountId() {
+        return undefined;
       },
-
-      async unlinkAccount(...params) {
-        console.log('unlink account', params);
+      async linkAccount() {
+        return undefined;
       },
-      async createSession(user) {
-        console.log('create session', user);
-        return null;
+      async unlinkAccount() {
+        return undefined;
       },
-      async getSession(sessionToken) {
-        console.log('get session', sessionToken);
-        return null;
+      async createSession() {
+        /*
+         * Because we use JWTs, session management
+         * in the DB is not needed.
+         */
+        return undefined;
       },
-      async updateSession(session, force) {
-        console.log('update session', session, force);
-        return null;
+      async getSession() {
+        return undefined;
       },
-      async deleteSession(sessionToken) {
-        console.log('delete session', sessionToken);
+      async updateSession() {
+        return undefined;
       },
-      async createVerificationRequest(...params) {
-        console.log('create verification request');
-        console.log(params.length);
-        // await provider.sendVerificationRequest({
-        //   identifier,
-        //   url,
-        //   baseUrl: appOptions.baseUrl,
-        //   provider,
-        //   token,
-        // });
-      },
-      async getVerificationRequest(...params) {
-        console.log('ger verification request', params);
-        return null;
-      },
-      async deleteVerificationRequest(...params) {
-        console.log('delete verification request', params);
+      async deleteSession() {
+        return undefined;
       },
     };
   },

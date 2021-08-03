@@ -1,4 +1,5 @@
 import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
+import { ObjectId } from 'mongodb';
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
@@ -14,6 +15,7 @@ export type Scalars = {
   Int: number;
   Float: number;
   Date: Date;
+  ObjectId: ObjectId;
 };
 
 
@@ -22,6 +24,7 @@ export enum DbCollections {
   VerificationRequests = 'VerificationRequests'
 }
 
+
 export type Query = {
   __typename?: 'Query';
   users: Array<User>;
@@ -29,7 +32,7 @@ export type Query = {
 
 export type User = {
   __typename?: 'User';
-  _id: Scalars['ID'];
+  _id: Scalars['ObjectId'];
   email: Scalars['String'];
   emailVerified?: Maybe<Scalars['Date']>;
   createdAt: Scalars['Date'];
@@ -39,7 +42,7 @@ export type User = {
 
 export type VerificationRequest = {
   __typename?: 'VerificationRequest';
-  _id: Scalars['ID'];
+  _id: Scalars['ObjectId'];
   identifier: Scalars['String'];
   token: Scalars['String'];
   expires: Scalars['Date'];
@@ -180,9 +183,9 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 export type ResolversTypes = {
   Date: ResolverTypeWrapper<Scalars['Date']>;
   DbCollections: DbCollections;
+  ObjectId: ResolverTypeWrapper<Scalars['ObjectId']>;
   Query: ResolverTypeWrapper<{}>;
   User: ResolverTypeWrapper<User>;
-  ID: ResolverTypeWrapper<Scalars['ID']>;
   String: ResolverTypeWrapper<Scalars['String']>;
   VerificationRequest: ResolverTypeWrapper<VerificationRequest>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
@@ -191,9 +194,9 @@ export type ResolversTypes = {
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
   Date: Scalars['Date'];
+  ObjectId: Scalars['ObjectId'];
   Query: {};
   User: User;
-  ID: Scalars['ID'];
   String: Scalars['String'];
   VerificationRequest: VerificationRequest;
   Boolean: Scalars['Boolean'];
@@ -203,12 +206,16 @@ export interface DateScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes
   name: 'Date';
 }
 
+export interface ObjectIdScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['ObjectId'], any> {
+  name: 'ObjectId';
+}
+
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   users: Resolver<ReadonlyArray<ResolversTypes['User']>, ParentType, ContextType>;
 };
 
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
-  _id: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  _id: Resolver<ResolversTypes['ObjectId'], ParentType, ContextType>;
   email: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   emailVerified: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
   createdAt: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
@@ -218,7 +225,7 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
 };
 
 export type VerificationRequestResolvers<ContextType = any, ParentType extends ResolversParentTypes['VerificationRequest'] = ResolversParentTypes['VerificationRequest']> = {
-  _id: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  _id: Resolver<ResolversTypes['ObjectId'], ParentType, ContextType>;
   identifier: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   token: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   expires: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
@@ -229,6 +236,7 @@ export type VerificationRequestResolvers<ContextType = any, ParentType extends R
 
 export type Resolvers<ContextType = any> = {
   Date: GraphQLScalarType;
+  ObjectId: GraphQLScalarType;
   Query: QueryResolvers<ContextType>;
   User: UserResolvers<ContextType>;
   VerificationRequest: VerificationRequestResolvers<ContextType>;
