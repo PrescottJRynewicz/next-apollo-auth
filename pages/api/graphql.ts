@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { ApolloServer } from 'apollo-server-micro';
-import { typeDefs } from 'graph/types';
+import { typeDefs } from '/graph/typeDefs';
 import { resolvers } from '/graph/resolvers';
 import { Mongo } from '/database/mongo';
 import { getSession } from 'next-auth/client';
