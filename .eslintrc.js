@@ -13,10 +13,7 @@ module.exports = {
     ecmaVersion: 12,
     sourceType: 'module',
   },
-  settings: {
-    'import/resolver': 'meteor',
-  },
-  plugins: ['react', 'prettier', 'meteor', '@typescript-eslint'],
+  plugins: ['react', 'prettier', '@typescript-eslint'],
   rules: {
     'no-return-await': 'off',
     'import/prefer-default-export': 'off',
