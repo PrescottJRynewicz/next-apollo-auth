@@ -32,6 +32,13 @@ export default function StaticExample(props: StaticProps) {
           Explore this page at{' '}
           <code className={styles.code}>pages/static.tsx</code>
         </p>
+
+        <p>
+          <b>
+            This page is currently not fetching static data. Absolute back end
+            URLs need to be established for this to work
+          </b>
+        </p>
       </main>
 
       <footer className={styles.footer}>
