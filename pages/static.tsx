@@ -2,8 +2,7 @@ import React from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
 import styles from 'styles/Home.module.css';
-import { ClientGetUserQuery, GetUserDocument } from '/graph/generated.client';
-import { apolloClient } from '/graph/apolloClient';
+import { ClientGetUserQuery } from '/graph/generated.client';
 import { ApolloQueryResult } from '@apollo/client';
 import { GetStaticPropsContext } from 'next';
 
@@ -52,11 +51,12 @@ export default function StaticExample(props: StaticProps) {
 
 export async function getStaticProps(context: GetStaticPropsContext) {
   console.log(context);
-  const result = await apolloClient.query<ClientGetUserQuery>({
-    query: GetUserDocument,
-  });
+  // fix for production build
+  // const result = await apolloClient.query<ClientGetUserQuery>({
+  //   query: GetUserDocument,
+  // });
 
   return {
-    props: { users: result.data.users },
+    props: { users: [] },
   };
 }
