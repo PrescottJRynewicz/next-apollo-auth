@@ -2,17 +2,12 @@ import React from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
 import styles from 'styles/Home.module.css';
-import { ClientGetUserQuery } from '/graph/generated.client';
-import { ApolloQueryResult } from '@apollo/client';
-import { GetStaticPropsContext } from 'next';
 
 type StaticProps = {
-  users: ApolloQueryResult<ClientGetUserQuery>;
+  content: string[];
 };
 
 export default function StaticExample(props: StaticProps) {
-  console.log(props.users);
-
   return (
     <div className={styles.container}>
       <Head>
@@ -35,8 +30,7 @@ export default function StaticExample(props: StaticProps) {
 
         <p>
           <b>
-            This page is currently not fetching static data. Absolute back end
-            URLs need to be established for this to work
+            <code className={styles.code}>{JSON.stringify(props.content)}</code>
           </b>
         </p>
       </main>
@@ -56,14 +50,12 @@ export default function StaticExample(props: StaticProps) {
   );
 }
 
-export async function getStaticProps(context: GetStaticPropsContext) {
-  console.log(context);
-  // fix for production build
-  // const result = await apolloClient.query<ClientGetUserQuery>({
-  //   query: GetUserDocument,
-  // });
-
+export async function getStaticProps(): Promise<{
+  props: StaticProps;
+}> {
   return {
-    props: { users: [] },
+    props: {
+      content: ['this', 'data', 'was', 'generated', 'at', 'build', 'time', '!', '🚀🔥🤘🏼'],
+    },
   };
 }
