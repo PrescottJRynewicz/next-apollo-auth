@@ -17,8 +17,8 @@ const apolloServer = new ApolloServer({
     };
   },
 });
-console.log('here we go');
-console.log('starting apollo server');
+console.error('here we go');
+console.error('starting apollo server');
 const connectionPromises = Promise.all([
   apolloServer.start(),
   Mongo.connectionPromise,

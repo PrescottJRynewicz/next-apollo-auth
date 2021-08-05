@@ -6,6 +6,7 @@ import { Mongo } from '/database/mongo';
 
 if (!process.env.NEXTAUTH_URL) {
   if (process.env.VERCEL_URL || process.env.NEXT_PUBLIC_VERCEL_URL) {
+    console.error('setting NEXTAUTH_URL');
     process.env.NEXTAUTH_URL = `https://${
       process.env.VERCEL_URL || process.env.NEXT_PUBLIC_VERCEL_URL
     }`;
