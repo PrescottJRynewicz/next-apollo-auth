@@ -17,6 +17,7 @@ const apolloServer = new ApolloServer({
     };
   },
 });
+console.log('here we go');
 console.log('starting apollo server');
 const connectionPromises = Promise.all([
   apolloServer.start(),
