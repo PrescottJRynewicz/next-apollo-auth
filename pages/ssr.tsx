@@ -4,16 +4,12 @@ import Image from 'next/image';
 import styles from 'styles/Home.module.css';
 import { ClientGetUserQuery, GetUserDocument } from '/graph/generated.client';
 import { apolloClient } from '/graph/apolloClient';
-import { ApolloQueryResult } from '@apollo/client';
-import { GetServerSidePropsContext } from 'next';
 
 type SSRProps = {
-  users: ApolloQueryResult<ClientGetUserQuery>;
+  users: ClientGetUserQuery['users'];
 };
 
 export default function SSRExample(props: SSRProps) {
-  console.log(props.users);
-
   return (
     <div className={styles.container}>
       <Head>
@@ -36,6 +32,20 @@ export default function SSRExample(props: SSRProps) {
           Explore this page at{' '}
           <code className={styles.code}>pages/ssr.tsx</code>
         </p>
+        <p>
+          <b>
+            This data was generated on the server for first render
+            <code
+              className={styles.code}
+              style={{
+                maxWidth: '600px',
+                wordWrap: 'break-word',
+                whiteSpace: 'pre',
+              }}>
+              {JSON.stringify(props.users[0], null, '\n    ')}
+            </code>
+          </b>
+        </p>
       </main>
 
       <footer className={styles.footer}>
@@ -53,8 +63,7 @@ export default function SSRExample(props: SSRProps) {
   );
 }
 
-export async function getServerSideProps(context: GetServerSidePropsContext) {
-  console.log(context);
+export async function getServerSideProps(): Promise<{ props: SSRProps }> {
   const result = await apolloClient.query<ClientGetUserQuery>({
     query: GetUserDocument,
   });

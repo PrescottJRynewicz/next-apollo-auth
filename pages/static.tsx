@@ -55,7 +55,17 @@ export async function getStaticProps(): Promise<{
 }> {
   return {
     props: {
-      content: ['this', 'data', 'was', 'generated', 'at', 'build', 'time', '!', '🚀🔥🤘🏼'],
+      content: [
+        'this',
+        'data',
+        'was',
+        'generated',
+        'at',
+        'build',
+        'time',
+        '!',
+        '🚀🔥🤘🏼',
+      ],
     },
   };
 }
