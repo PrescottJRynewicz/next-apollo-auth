@@ -4,6 +4,15 @@ import MongoAdapter from '/pages/api/auth/utils/MongoAdapter';
 import { JWT } from 'next-auth/jwt';
 import { Mongo } from '/database/mongo';
 
+if (!process.env.NEXTAUTH_URL) {
+  if (process.env.VERCEL_URL || process.env.NEXT_PUBLIC_VERCEL_URL) {
+    process.env.NEXTAUTH_URL = `https://${
+      process.env.VERCEL_URL || process.env.NEXT_PUBLIC_VERCEL_URL
+    }`;
+  } else {
+    throw new Error('Unable to use next auth authentication - no url set');
+  }
+}
 export default NextAuth({
   providers: [
     Providers.Email({
