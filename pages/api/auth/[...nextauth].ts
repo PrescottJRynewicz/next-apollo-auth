@@ -1,6 +1,6 @@
 import NextAuth, { Session } from 'next-auth';
 import Providers from 'next-auth/providers';
-import MongoAdapter from '/pages/api/auth/utils/MongoAdapter';
+import MongoAdapter from '/database/utils/MongoAdapter';
 import { JWT } from 'next-auth/jwt';
 import { Mongo } from '/database/mongo';
 
