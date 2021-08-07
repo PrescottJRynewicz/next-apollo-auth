@@ -1,5 +1,5 @@
 import { ApolloError } from 'apollo-server-micro';
-import { Resolvers } from '/graph/generated.server';
+import { Resolvers } from '/generated/server';
 import { ContextType } from '/graph/context';
 import { DeepPartial } from 'ts-essentials';
 

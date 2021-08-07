@@ -2,7 +2,7 @@ import React from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
 import styles from 'styles/Home.module.css';
-import { ClientGetUserQuery, GetUserDocument } from '/graph/generated.client';
+import { ClientGetUserQuery, GetUserDocument } from '/generated/client';
 import { apolloClient } from '/graph/apolloClient';
 
 type SSRProps = {

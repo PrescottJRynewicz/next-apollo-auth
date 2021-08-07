@@ -1,4 +1,4 @@
-import { useGetUserQuery } from '/graph/generated.client';
+import { useGetUserQuery } from '/generated/client';
 import styles from '/styles/Home.module.css';
 import Head from 'next/head';
 import React from 'react';

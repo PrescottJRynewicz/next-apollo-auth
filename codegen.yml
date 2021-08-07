@@ -6,7 +6,7 @@ generates:
   # Server types.
   # Specifically, types that mongo read / writes
   # and will be used in graph ql resolvers
-  ./graph/generated.server.ts:
+  ./generated/server.ts:
     plugins:
       - typescript:
           scalars:
@@ -24,7 +24,7 @@ generates:
     # Client types.
     # Specifically, types that are returned from
     # graphql queries, to be used on the front end
-  ./graph/generated.client.ts:
+  ./generated/client.ts:
     config:
       scalars:
         ObjectId: string

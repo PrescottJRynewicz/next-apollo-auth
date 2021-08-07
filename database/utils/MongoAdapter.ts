@@ -1,6 +1,6 @@
 import { Adapter, AdapterInstance } from 'next-auth/adapters';
 import { Mongo } from '/database/mongo';
-import { User } from '/graph/generated.server';
+import { User } from '/generated/server';
 import { ObjectId } from 'mongodb';
 import { Session } from 'next-auth';
 

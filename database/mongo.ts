@@ -3,7 +3,7 @@ import {
   DbCollections,
   User,
   VerificationRequest,
-} from '/graph/generated.server';
+} from '/generated/server';
 
 // Connection URL
 const url = process.env.MONGO_URI;

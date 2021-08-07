@@ -1,4 +1,4 @@
-import { Resolvers } from '/graph/generated.server';
+import { Resolvers } from '/generated/server';
 import { userResolver } from '/graph/user/resolver';
 import { DateScalar, ObjectIdScalar } from '/graph/scalars';
 
