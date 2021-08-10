@@ -2,12 +2,16 @@ import React from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
 import styles from 'styles/Home.module.css';
+import { GetStaticPropsContext } from 'next';
+import { useSession } from 'next-auth/client';
 
 type StaticProps = {
   content: string[];
 };
 
 export default function StaticExample(props: StaticProps) {
+  const [session] = useSession();
+
   return (
     <div className={styles.container}>
       <Head>
@@ -33,6 +37,14 @@ export default function StaticExample(props: StaticProps) {
             <code className={styles.code}>{JSON.stringify(props.content)}</code>
           </b>
         </p>
+
+        <p>
+          And even though this page was rendered statically - this user session
+          is served dynamically
+        </p>
+        <code className={styles.code}>
+          {JSON.stringify(session?.user || 'no user')}
+        </code>
       </main>
 
       <footer className={styles.footer}>
@@ -50,9 +62,11 @@ export default function StaticExample(props: StaticProps) {
   );
 }
 
-export async function getStaticProps(): Promise<{
+export async function getStaticProps(context: GetStaticPropsContext): Promise<{
   props: StaticProps;
 }> {
+  console.log(context);
+
   return {
     props: {
       content: [
