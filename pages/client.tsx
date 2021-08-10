@@ -17,7 +17,7 @@ export default function Client() {
           wordWrap: 'break-word',
           whiteSpace: 'pre',
         }}>
-        {JSON.stringify(data?.users[0], null, '\n    ')}
+        {JSON.stringify(data?.users, null, '\n    ')}
       </code>
     );
   };
