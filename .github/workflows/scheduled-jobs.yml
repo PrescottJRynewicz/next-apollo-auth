@@ -1,0 +1,14 @@
+# .github/workflows/scheduled-builds.yml
+name: Run CRON Schedule
+
+on:
+  schedule:
+    - cron: '*/1 * * * *'
+jobs:
+  graphql:
+    name: GraphQL Keep Awake
+    runs-on: ubuntu-latest
+    steps:
+      - name: cURL request
+        # Hit the webhook endpoint to rebuild  from the "main" branch
+        run: curl -X POST -d {} https://www.prescottjr.com/api/graphql
