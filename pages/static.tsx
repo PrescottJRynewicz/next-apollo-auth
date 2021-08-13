@@ -2,7 +2,6 @@ import React from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
 import styles from 'styles/Home.module.css';
-import { GetStaticPropsContext } from 'next';
 import { useSession } from 'next-auth/client';
 
 type StaticProps = {
@@ -62,11 +61,9 @@ export default function StaticExample(props: StaticProps) {
   );
 }
 
-export async function getStaticProps(context: GetStaticPropsContext): Promise<{
+export async function getStaticProps(): Promise<{
   props: StaticProps;
 }> {
-  console.log(context);
-
   return {
     props: {
       content: [
