@@ -4,8 +4,86 @@ import Image from 'next/image';
 import React, { CSSProperties } from 'react';
 import Link from 'next/link';
 import { signIn, signOut } from 'next-auth/client';
+import styled, { keyframes } from 'styled-components';
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: row;
+  background-color: green;
+  height: 100vh;
+  width: 100vw;
+`;
+
+const WaveAnimationRight = keyframes`
+  50% {
+    margin-left: 25vw;
+  }
+`;
+
+const WaveAnimationLeft = keyframes`
+  50% {
+    width: 50%;
+  }
+`;
+
+const Column = styled.div`
+  display: flex;
+  flex-direction: column;
+  background-color: blue;
+  height: 100%;
+  width: 50%;
+`;
+
+const numRows = 100;
+const initAnimationDelay = 1000;
+const animationDelayDiff = 100;
+const animationDurationMs = animationDelayDiff * numRows;
+
+const Row = styled.div<{ position: 'left' | 'right' }>`
+  border-radius: ${(props) =>
+    props.position === 'right' ? '10px 0 0 10px' : '0 10px 10px 0'};
+  background-color: blanchedalmond;
+  height: ${100 / numRows}%;
+  width: 100%;
+  animation: ${(props) =>
+    props.position === 'left' ? WaveAnimationLeft : WaveAnimationRight};
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+  animation-duration: ${5000}ms;
+`;
 
 export default function Home() {
+  return (
+    <Container>
+      <Column>
+        {new Array(numRows).fill(0).map((_value, index) => (
+          <Row
+            position="left"
+            style={{
+              animationDelay: `${
+                initAnimationDelay + index * animationDelayDiff
+              }ms`,
+            }}
+          />
+        ))}
+      </Column>
+      <Column>
+        {new Array(numRows).fill(0).map((_value, index) => (
+          <Row
+            position="right"
+            style={{
+              animationDelay: `${
+                initAnimationDelay + index * animationDelayDiff
+              }ms`,
+            }}
+          />
+        ))}
+      </Column>
+    </Container>
+  );
+}
+
+export function OldHome() {
   const buttonStyle: CSSProperties = {
     border: 'solid black',
     padding: '10px',
